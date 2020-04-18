@@ -1,0 +1,164 @@
+/*
+
+All grid code is placed in a 'supports' rule (feature query) at the bottom of the CSS (Line 77). 
+        
+The 'supports' rule will only run if your browser supports CSS grid.
+
+Flexbox is used as a fallback so that browsers which don't support grid will still recieve an identical layout.
+
+*/
+
+@import url(https://fonts.googleapis.com/css?family=Montserrat:500);
+
+$org-color:#00aeef;
+
+:root {
+  /* Base font size */
+  font-size: 10px;
+}
+
+* {
+  box-sizing: border-box;
+
+  &::before, &::after {
+    box-sizing: border-box;
+  }
+}
+
+body {
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+
+.container {
+  max-width: 100rem;
+  margin: 0 auto;
+  padding: 0 2rem 2rem;
+}
+
+.heading {
+  font-family: "Montserrat", Arial, sans-serif;
+  font-size: 4rem;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+  padding: 3.5rem 0;
+  color: $org-color;
+
+  span {
+    display: block;
+  }
+}
+
+.input-group {
+	width: 100%;
+	height: auto;
+	position: relative;
+	&__input {
+		display: block;
+		-moz-appearance: none;
+		-webkit-appearance: none;
+		appearance: none;
+		width: 100%;
+		background-color: transparent;
+		font-size: 18px;
+		letter-spacing: 0.1em;
+		color: #666; //black
+		padding: 8px 4px;
+		outline: none;
+		border: none;
+		border-radius: 0px;
+		border-bottom: 2px solid #666;	
+    &:valid ~ .input-group__label {
+      color: $org-color; //green
+    }
+		&:invalid ~ .input-group__label {
+      color: #e74c3c; //red
+    }
+    &:placeholder-shown ~ .input-group__label {
+      color: #666; //black
+    }
+		/* Floating animation */
+		&:focus ~ .input-group__label, 
+		&:not(:placeholder-shown) ~ .input-group__label {
+			transform: translateX(-8px) translateY(-28px) scale(0.8);
+    }
+	}
+	&__label {
+		font-size: 18px;
+		letter-spacing: 0.05em;
+		position: absolute;
+		top: 8px;
+		left: 4px;
+		cursor: text;
+		transition: all 0.3s ease;
+	}
+}
+
+.button {
+  background-color: $org-color;
+  border: 1px solid $org-color;
+  color: #ffffff;;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  &:hover{
+    background-color:#ffffff;
+    color:$org-color;
+  }
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  /* Compensate for excess margin on outer gallery flex items */
+  // margin: 1rem 1rem;
+}
+
+.gallery-item {
+  /* Minimum width of 24rem and grow to fit available space */
+  flex: 1 0 24rem;
+
+  /* Margin value should be half of grid-gap value as margins on flex items don't collapse */
+  margin: 1rem;
+  box-shadow: 0.3rem 0.4rem 0.4rem rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  height:min-content
+}
+
+.gallery-image {
+  display: block;
+  width: 100%;
+  // height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease-out;
+
+  &:hover {
+    transform: scale(1.15);
+  }
+}
+
+/*
+
+The following rule will only run if your browser supports CSS grid.
+
+Remove or comment-out the code block below to see how the browser will fall-back to flexbox styling. 
+
+*/
+
+@supports (display: grid) {
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+    grid-gap: 2rem;
+    margin: 0;
+  }
+
+  .gallery-item {
+    margin: 0;
+  }
+}
