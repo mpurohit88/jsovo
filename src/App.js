@@ -8,7 +8,7 @@ import "./App.scss";
 const App = () => {
   const [photo, setPhoto] = useState("");
   const clientID = "Ku3lPHKp5reQ48M2tSs7D5ANT0lgQAyEqf85zndcIow";
-  const [next, setNext] = useState(0);
+  const [next, setNext] = useState(1);
 
   const data = useSelector(state => state);
   const dispatch = useDispatch();
@@ -17,27 +17,43 @@ const App = () => {
     setPhoto(e.target.value);
   };
 
-  const handleClick = e => {
-    const url = `https://api.unsplash.com/search/photos?&query=${photo}&client_id=${clientID}&page=${next}&per_page=50`;
+  const handleClick = (pageNo) => {
+    setNext(pageNo);
+    fetchData(pageNo);
+  };
+
+  function fetchData(pageNo) {
+    dispatch({ type: "photos_fetch" });
+
+    const url = `https://api.unsplash.com/search/photos?&query=${photo}&client_id=${clientID}&page=${pageNo}&per_page=2`;
 
     axios.get(url).then(response => {
-      dispatch({ type: "photos", data: response.data.results })
+      dispatch({ type: "photos_success", value: { photos: response.data.results } });
+    }).catch(error => {
+      dispatch({ type: "photos_failure", value: { error: error } });
     });
+  }
+
+  const nextPage = (pageNo) => {
+    setNext(pageNo);
+    fetchData(pageNo);
   };
 
-  const nextPage = () => {
-    setNext(next + 1);
-    handleClick();
-  };
+  const previousPage = (pageNo) => {
+    if (pageNo > 1) {
+      pageNo = pageNo - 1;
 
-  const previousPage = () => {
-    setNext(next - 1);
-    handleClick();
+      setNext(pageNo);
+      fetchData(pageNo);
+    }
+
+    return false;
   };
 
   return (
     <div className="container">
-      {console.log("photos....", data.photos)}
+      {data.isLoading && <div class="loading"></div>}
+
       <h1 className="heading">Unsplash Image Search</h1>
 
       <div className="input-group">
@@ -52,13 +68,13 @@ const App = () => {
           Find Photo
         </label>
       </div>
-      <button className="button" onClick={handleClick} type="submit">
+      <button className="button" onClick={() => handleClick(1)} type="submit">
         Search
       </button>
-      <button className="button" onClick={previousPage}>
+      <button className={next === 1 ? "btn-disabled" : "button"} onClick={() => previousPage(next)}>
         Previous
       </button>
-      <button className="button" onClick={nextPage}>
+      <button className="button" onClick={() => nextPage(next + 1)}>
         Next
       </button>
       <div className="masonry">

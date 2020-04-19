@@ -1,11 +1,23 @@
 function reducer(state = { photos: [] }, action) {
   switch (action.type) {
-    case "photos":
+    case "photos_fetch":
       return {
-        photos: action.data
+        isLoading: true,
+        error: {}
+      }
+    case "photos_success":
+      return {
+        photos: action.value.photos,
+        isLoading: false,
+        error: {}
+      }
+    case "photos_failure":
+      return {
+        isLoading: false,
+        error: action.value.error
       }
     default:
-      return state.photos
+      return []
   }
 }
 

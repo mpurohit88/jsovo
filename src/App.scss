@@ -1,7 +1,8 @@
 
 @import url(https://fonts.googleapis.com/css?family=Montserrat:500);
 
-$org-color:#00aeef;
+$org-color:hsl(196, 100%, 47%);
+$gry-color: hsl(197, 3%, 46%);
 
 :root {
   /* Base font size */
@@ -104,6 +105,18 @@ body {
   }
 }
 
+.btn-disabled {
+  background-color: $gry-color;
+  border: 1px solid $gry-color;
+  color: #ffffff;;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+}
+
 
 .masonry {
   columns: 3;
@@ -176,4 +189,26 @@ body {
 }
 .mt-auto {
   margin-top:auto;
+}
+
+.loading {
+  height: 0;
+  width: 0;
+  padding: 15px;
+  border: 6px solid #ccc;
+  border-right-color: #888;
+  border-radius: 22px;
+  -webkit-animation: rotate 1s infinite linear;
+  /* left, top and position just for the demo! */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+@-webkit-keyframes rotate {
+  /* 100% keyframe for  clockwise. 
+     use 0% instead for anticlockwise */
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
